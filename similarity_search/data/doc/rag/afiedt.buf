@@ -1,0 +1,4 @@
+SELECT dt.id 문서번호, dt.doc_name 문서명, dbms_vector_chain.utl_to_text(doc, json('{"plaintext":"true","charset":"UTF8"}')) doc_txt  문서내용
+from rag_tbl dt
+where id = 3
+/
