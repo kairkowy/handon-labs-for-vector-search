@@ -1,4 +1,16 @@
+# 벡터 인덱싱을 위한 SGA 수정
+
+벡터 인덱싱을 위해서는 vector_memory_size 파라미터로 SGA 내에 별도 인덱싱을 처리하는 메모리 영역을 만들어 줘야함.
+
+ sqlplus / as sysdba
+
+ ALTER SYSTEM SET vector_memory_size=1G SCOPE=BOTH;
+
+ shutdown immediate -- DB restart
+ startup
+
 # Similarity search(text) 데이터 준비
+
 grant create any directory to vector;
 
 CREATE OR REPLACE DIRECTORY DOCPATH as '/home/dev01/labs/23aiNF/similarity_search/data/doc';
@@ -171,3 +183,11 @@ insert into broad_tbl (보도번호 , 부처명 , 보도제목 , 주무부서 , 
 (28790,'산업자원부','(참고자료)다자통상협력과, 최성요 주제네바 차석대사, 세계무역기구(WTO) 우즈베키스탄 가입작업반 의장 수임','다자통상협력과','2025-07-24',null),
 (28789,'산업자원부','AI 기반 소재 개발, 데이터 표준화로 가속','전기전자정보표준과','2025-07-24',null),          
 (28788,'산업자원부','(참고자료)통상정책총괄과, 산업부 장관, 한미 관세협상 진전 및 산업 에너지 협력 강화를 위해 방미','통상정책총괄과','2025-07-23',null)
+
+
+# 2-3 벡터 인덱싱
+
+create vector index doc_store_chunks_idx on doc_store_chunks(embed_vector)
+ORGANIZATION INMEMORY NEIGHBOR GRAPH
+WITH DISTANCE COSINE;
+
