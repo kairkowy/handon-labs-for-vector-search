@@ -4,6 +4,10 @@
 
  sqlplus / as sysdba
 
+ show parameter vector_memory_size
+
+ -- 지정이 안됐으면 파라미터 업데이트 필요
+
  ALTER SYSTEM SET vector_memory_size=1G SCOPE=BOTH;
 
  shutdown immediate -- DB restart
