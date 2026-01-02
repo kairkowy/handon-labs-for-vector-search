@@ -6,7 +6,7 @@
 
 오프라인 환경에 온라인에서 다운로드한 파일을 이동해서 가상환경의 미디어 환경에 마운트시킵니다.
 
-VMware 가상머신에서 ISO file을 이용한 OL8.10을 설치하는 방법을 참고하여 OS를 설치합니다.
+VMware 가상머신에서 마운트 된 ISO file을 이용하여 OL8.10을 설치하는 방법을 참고하여 OS를 설치합니다.
 
 
 ### 2. 오라클 Instant Client for linux 설치 
@@ -49,6 +49,8 @@ rpm -qa|grep libaio
 su - orale
 cp /tmp/instantclient*.zip /opt/oracle
 cd /opt/oracle
+
+# 설치파일 압축 풀기
 
 unzip instantclient-basic-linux.x64-23.26.0.0.0.zip
 
@@ -133,7 +135,6 @@ tar xvf python_rpms_no_tk.tar
 cd /opt/python/python_rpms_no_tk
 
 dnf --disablerepo="*" --nogpgcheck install ./*.rpm
-
 ```
 
 3.3 sqlite 확인 및 설치
@@ -144,7 +145,6 @@ python -c "import sqlite3"
 ModuleNotFoundError: No module named '_sqlite3' 에러 발생시 sqlite3-devel 설치 후 python 부터 재설치를 진행하세요. 
 
 rpm -q sqlite sqlite-libs sqlite-devel
-
 ```
 sqlite-devel 패키지가 없으면 sqlite3 설치합니다. 온라인 서버에서 다운로드한 sqlite3 패키지를 오프라인 서버로 이동했으면 다음과 같이 진행합니다.
 
@@ -165,7 +165,7 @@ sqlite3 --version
 파이썬은 개별 계정별로 설치하는 방법을 제안드립니다. AI 모델 특성상 버전 호환성이 민감하여 개정별로 패키지 버전 관리가 유용합니다.
 오프라인 서버로 python-3.12.6.tgz 파일을 이동했으면 다음을 진행합니다.
 
-- 설치 소스 파일 준비
+설치 소스 파일 준비
 
 ```
 su - 계정명
@@ -174,7 +174,7 @@ cp /opt/python/Python-3.12.6.tgz $HOME/python/.
 cd $HOME/python
 tar xvf Python-3.12.6.tgz 
 ```
-- 파이썬 빌드 및 링크
+파이썬 빌드 및 링크
 ```
 cd $HOME/python/Python-3.12.6
 
@@ -202,7 +202,7 @@ ln -s python3.12 python
 ln -s pip3.12 pip3
 ln -s pip3.12 pip
 ```
-- 파이썬 실행 환경 설정
+ 파이썬 실행 환경 설정
 ```
 vi .bash_profile 
 
@@ -212,10 +212,11 @@ export PATH=$PYTHON_HOME/bin:$PATH
 
 source .basg_profile
 ```
-- 현재 Python이 사용하는 site-packages 경로 확인
 
+현재 Python이 사용하는 site-packages 경로 확인
+```
 python -c "import site; print(site.getsitepackages())"
-
+```
 
 ### 4. PIP 업그레이드
 
@@ -246,7 +247,6 @@ ls
 
 cd /opt/python/def_whl
 python3 -m pip install --no-index --find-links=/opt/python/def_whl -r /opt/python/def_whl/def_whl.txt
-
 ```
 
 ### 6. oml4py 설치
@@ -375,7 +375,6 @@ X-Content-Type-Options: nosniff
 Content-Security-Policy: frame-ancestors 'self'; report-uri /api/security/csp-report
 Content-Length: 2921
 Set-Cookie: _xsrf=2|dd9f335d|06b553f578fe9b90b1f5d21f38ebeac1|1762474564; Path=/
-
 ```
 
 파이어월에서 7100 또는 사용자 지정 서비스 포트 개방 
@@ -408,7 +407,7 @@ grant connect, resource to modeladm;
 grant create any directory to modeladm;
 ```
 
-임베딩 모델의 DB 로딩
+임베딩 모델의 DB 로딩 및 모델 조회;
 ```sql
 su - oracle
 
@@ -451,7 +450,7 @@ create synonym 모델명 for modeladm.모델명;
 SELECT TO_VECTOR(VECTOR_EMBEDDING(모델명 USING '문장' as data)) AS embedding;
 ```
 
-오라클23ai에서 제공되는 다양한 벡터관련 함수 유틸리티와 결합하여 인디비 임베딩를 처리할 수 있습니다.
+오라클23ai에서 제공되는 다양한 벡터관련 함수 유틸리티와 결합하여 인디비 임베딩을 처리할 수 있습니다.
 
 샘플 벡터 쿼리
 
@@ -474,24 +473,16 @@ DB에 로딩된 임베딩 모델의 관리, 삭제 등의 방법은 오라클 AI
 
 9.2 ollama 서비스 관리
 
+```
 su - ollama
 
--서비스 상태 확인
-systemctl --user status ollama
+systemctl --user status ollama    -- 서비스 상태 확인
+systemctl --user start ollama     -- 서비스 시작
+systemctl --user stop ollam       -- 서비스 중지
+systemctl --user enable ollama    -- 부팅시 자동 실행
+systemctl --user daemon-reload    --서비스 리로드
 
--서비스 시작
-systemctl --user start ollama
-
-- 서비스 중지
-systemctl --user stop ollam
-
--부팅시 자동 실행
-systemctl --user enable ollama
-
-- 서비스 리로드
-systemctl --user daemon-reload
-
-
+```
 9.3 ollama 서비스 모델 확인
 
 ```
@@ -515,9 +506,11 @@ curl -X POST http://ollama:11434/api/embeddings -d '{"model" : "llama3.2","promp
 9.5 ollama-오라클DB RAG
 
 DB 스키마에 APIs 권한 부여 
+
 ```
 su - oracle      
 sqlplus / as sysdba
+
 alter session set container=db1;
 show con_name;
 
@@ -526,6 +519,7 @@ GRANT execute on SYS.UTL_HTTP to 스키마
 GRANT execute on sys.dbms_network_acl_admin to 스키마;
 ```
 ollama API용 ACL 생성
+
 ```
 sqlplus 스키마/패스워드@xdwa
 
@@ -545,8 +539,10 @@ END;
 ```
 
 오라클 API 이용한 임베딩 테스트
+
+  sqlplus 스키마/패스워드@xdwa
+
 ```
-sqlplus 스키마/패스워드@xdwa
 
 var embed_ollama_params clob;
 exec :embed_ollama_params := '{"provider": "ollama","host":"local","url": "http://x.x.x.142:11434/api/embeddings","model":"llama3.2"}';
