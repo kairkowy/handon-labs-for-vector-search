@@ -2,15 +2,14 @@
 
 오프라인(인터넷 액세스 불가) 환경에서 오라클 벡터검색 환경구성을 위한 가이드 문서입니다. 오라클 사용자 가이드 매뉴얼 내용은 인터넷 온라인 환경을 기준으로 기술되어 있어서 오프라인 환경의 작업을 위해서는 개별적인 추가 작업 기술이 필요합니다. 이러한 부분에서 온라인, 오프라인 작업자의 작업을 돕기 위하여 관련 내용을 정리하게 되었습니다.
 
-
-1. Oracle Linux(8.10) 설치
+1 Oracle Linux(8.10) 설치
 
 오프라인 환경에 온라인에서 다운로드한 파일을 이동해서 가상환경의 미디어 환경에 마운트시킵니다.
 
 VMware 가상머신에서 ISO file을 이용한 OL8.10을 설치하는 방법을 참고하여 OS를 설치합니다.
 
 
-2. 오라클 Instant Client for linux 설치 
+2 오라클 Instant Client for linux 설치 
 
 2.1 필수 라이브러리(libaio) 설치
 
@@ -109,7 +108,7 @@ sqlplus labadmin/labadmin@xdwa
 DB접속이 정상적으로 되는지 확인 합니다.
 
 
-3. 파이썬 설치
+3 파이썬 설치
 
 3.1 오라클 백터검색 유틸리티 셋
 
@@ -218,7 +217,7 @@ source .basg_profile
 python -c "import site; print(site.getsitepackages())"
 
 
-4. PIP 업그레이드
+4 PIP 업그레이드
 
 온라인 서버에서 패키징한 라이브러리를 오프라인 서버로 이동했으면 오프라인 서버에서 다음과 같이 진행합니다. 
 
@@ -234,7 +233,7 @@ pip --version
 pip 25.3 
 ```
 
-5. 오라클 벡터검색 기본 라이브러리 설치
+5 오라클 벡터검색 기본 라이브러리 설치
 
 온라인 서버에서 패키징한 벡터검색 기본 라이브러리를 오프라인 서버로 이동했으면 오프라인 서버에서 다음과 같이 진행합니다.
 ```
@@ -250,7 +249,7 @@ python3 -m pip install --no-index --find-links=/opt/python/def_whl -r /opt/pytho
 
 ```
 
-6. oml4py 설치
+6 oml4py 설치
 
 이 파일은 공통자원으로 사용이 가능하기 떄문에 공통자원 디렉토리에 저장해 놓고 필요한 사용자 별로 자신의 패키지 셋에 설치하여 사용합니다. 온라인에서 다운로드 된 파일을 오프라인 서버로 이동했으면 다음과 같이 진행합니다.
 
@@ -275,12 +274,12 @@ ONNXPipelineConfig.show_preconfigured()
 모델 리스트가 나오면 성공!
 ```
 
-6. jupyterlab 설치 
+7 jupyterlab 설치 
 
 * jupyter lab은 파이썬 GUI 유틸리티입니다. 필요하신 분만 설치해서 사용하십시오.
 * 기존 서비스 URL은 http://x.x.x.x:7100/lab이며 7100 입니다.계정별로 서비스 포트를 분리하여 사용하세요. 
 
-6.1 jupyter lab 설치 
+7.1 jupyter lab 설치 
 ```
 su - 계정명       -- python 사용 계정 
 
@@ -297,7 +296,7 @@ python -c "import sqlite3; print(sqlite3.sqlite_version)"
 ```
 버전 확인 (이게 통과되야 끝)
 
-6.2 jupyterlab 개별 환경 설정
+7.2 jupyterlab 개별 환경 설정
 
 각 계정마다 jupyterlab 환경을 사용할 경우 다으을 참고하여 포트 및 실행 위치를 분리하여 사용할 수 있습니다.
 
