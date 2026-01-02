@@ -2,14 +2,14 @@
 
 오프라인(인터넷 액세스 불가) 환경에서 오라클 벡터검색 환경구성을 위한 가이드 문서입니다. 오라클 사용자 가이드 매뉴얼 내용은 인터넷 온라인 환경을 기준으로 기술되어 있어서 오프라인 환경의 작업을 위해서는 개별적인 추가 작업 기술이 필요합니다. 이러한 부분에서 온라인, 오프라인 작업자의 작업을 돕기 위하여 관련 내용을 정리하게 되었습니다.
 
-1 Oracle Linux(8.10) 설치
+### 1. Oracle Linux(8.10) 설치
 
 오프라인 환경에 온라인에서 다운로드한 파일을 이동해서 가상환경의 미디어 환경에 마운트시킵니다.
 
 VMware 가상머신에서 ISO file을 이용한 OL8.10을 설치하는 방법을 참고하여 OS를 설치합니다.
 
 
-2 오라클 Instant Client for linux 설치 
+### 2. 오라클 Instant Client for linux 설치 
 
 2.1 필수 라이브러리(libaio) 설치
 
@@ -69,7 +69,7 @@ $ sh -c "echo /opt/oracle/instantclient_23_26 > /etc/ld.so.conf.d/oracle-instant
 $ ldconfig
 ```
 
-2.3 유저 환경 설정  
+2.4 유저 환경 설정  
 
 오라클 클라이언트 환경이 필요한 계정에서 다음과 같이 진행합니다.
 
@@ -108,7 +108,7 @@ sqlplus labadmin/labadmin@xdwa
 DB접속이 정상적으로 되는지 확인 합니다.
 
 
-3 파이썬 설치
+### 3. 파이썬 설치
 
 3.1 오라클 백터검색 유틸리티 셋
 
@@ -217,7 +217,7 @@ source .basg_profile
 python -c "import site; print(site.getsitepackages())"
 
 
-4 PIP 업그레이드
+### 4. PIP 업그레이드
 
 온라인 서버에서 패키징한 라이브러리를 오프라인 서버로 이동했으면 오프라인 서버에서 다음과 같이 진행합니다. 
 
@@ -233,7 +233,7 @@ pip --version
 pip 25.3 
 ```
 
-5 오라클 벡터검색 기본 라이브러리 설치
+### 5. 오라클 벡터검색 기본 라이브러리 설치
 
 온라인 서버에서 패키징한 벡터검색 기본 라이브러리를 오프라인 서버로 이동했으면 오프라인 서버에서 다음과 같이 진행합니다.
 ```
@@ -249,7 +249,7 @@ python3 -m pip install --no-index --find-links=/opt/python/def_whl -r /opt/pytho
 
 ```
 
-6 oml4py 설치
+### 6. oml4py 설치
 
 이 파일은 공통자원으로 사용이 가능하기 떄문에 공통자원 디렉토리에 저장해 놓고 필요한 사용자 별로 자신의 패키지 셋에 설치하여 사용합니다. 온라인에서 다운로드 된 파일을 오프라인 서버로 이동했으면 다음과 같이 진행합니다.
 
@@ -274,7 +274,7 @@ ONNXPipelineConfig.show_preconfigured()
 모델 리스트가 나오면 성공!
 ```
 
-7 jupyterlab 설치 
+### 7. jupyterlab 설치 
 
 * jupyter lab은 파이썬 GUI 유틸리티입니다. 필요하신 분만 설치해서 사용하십시오.
 * 기존 서비스 URL은 http://x.x.x.x:7100/lab이며 7100 입니다.계정별로 서비스 포트를 분리하여 사용하세요. 
@@ -380,7 +380,7 @@ Set-Cookie: _xsrf=2|dd9f335d|06b553f578fe9b90b1f5d21f38ebeac1|1762474564; Path=/
 
 파이어월에서 7100 또는 사용자 지정 서비스 포트 개방 
 
-8. ONNX 임베딩 모델 로딩
+### 8. ONNX 임베딩 모델 로딩
 
 * 오라클이 제공하는 임베딩 모델 32종은 인터넷 환경에서 다운로드 후 DB에 로딩하는 방법을 사용합니다. 인터넷 연결이 안되는 오프라인 환경에서는 우선 인터넷 환경에서 오라클 ONNX 유티리티(python 유틸리티)를 사용하여 모델을 다운로드하고, 다운로드된 ONNX 모델 파일을 오프라인 DB 서버로 옮긴 후 ONNX 유틸리티로 DB에 로딩을 할수 있습니다.
 * 온라인 DB서버에서 다운로드 된 ONNX 모델을 오프라인 서버의 /u01/models 이동했으면 다음과 같이 진행합니다.
@@ -465,7 +465,7 @@ https://github.com/kairkowy/handon-labs-for-vector-search/tree/main/ONNX 를 참
 
 DB에 로딩된 임베딩 모델의 관리, 삭제 등의 방법은 오라클 AI 벡터검색 사용자 가이드 https://docs.oracle.com/en/database/oracle/oracle-database/26/vecse/get-started-node.html 을 참고하세요. 
 
-9. RAG for Oracle
+### 9. RAG for Oracle
 
 9.1 ollama 서비스 환경
 
