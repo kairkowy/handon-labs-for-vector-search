@@ -6,7 +6,7 @@
 
 오프라인 환경에 온라인에서 다운로드한 파일을 이동해서 가상환경의 미디어 환경에 마운트시킵니다.
 
-VMware 가상머신에서 마운트 된 ISO file을 이용하여 OL8.10을 설치하는 방법을 참고하여 OS를 설치합니다.
+VMware 가상머신에서 마운트 된 ISO file을 이용하여 OL8.10을 설치하는 방법 https://github.com/kairkowy/handon-labs-for-vector-search/blob/main/similarity_search/VMware%20%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0%EC%97%90%EC%84%9C%20ISO%20file%20for%20OL8.10%EC%9D%84%20%EC%84%A4%EC%B9%98%ED%95%98%EB%8A%94%20%EB%B0%A9%EB%B2%95.md 을 참고하여 OS를 설치합니다.
 
 
 ### 2. 오라클 Instant Client for linux 설치 
@@ -565,6 +565,7 @@ OLLAMA_OUTPUT
 ```
 * 실무 적용 샘플 RAG는 https://github.com/kairkowy/handon-labs-for-vector-search/tree/main/similarity_search 의 2-1.RAG_DOC.ipynb, 2-2.RAG_Table.ipynb 파일을 참조하세요.
 
---- end of document
+---------
+end of document
 
 감사합니다.
