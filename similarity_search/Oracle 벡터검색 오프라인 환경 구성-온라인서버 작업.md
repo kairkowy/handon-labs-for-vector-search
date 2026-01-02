@@ -2,7 +2,7 @@
 
 오프라인(인터넷 액세스 불가) 환경에서 오라클 벡터검색 환경구성을 위한 가이드 문서입니다. 오라클 사용자 가이드 매뉴얼 내용은 인터넷 온라인 환경을 기준으로 기술되어 있어서 오프라인 환경의 작업을 위해서는 개별적인 추가 작업 기술이 필요합니다. 이러한 부분에서 온라인, 오프라인 작업자의 작업을 돕기 위하여 관련 내용을 정리하게 되었습니다.
 
-1. Oracle Linux (8.10) 다운로드 및 준비
+1 Oracle Linux (8.10) 다운로드 및 준비
 
 VMware 상에서 OL8.10 설치하는 방법을 기술하였습니다.
 
@@ -13,7 +13,7 @@ https://yum.oracle.com/oracle-linux-isos.html 에서 Full ISO 파일을 다운�
 VMware 가상머신에서 ISO file을 이용한 OL8.10을 설치하는 방법을 사용하여 OS를 설치합니다.
 
 
-2. 오라클 Instant Client for linux 다운로드 및 준비
+2 오라클 Instant Client for linux 다운로드 및 준비
 
 2.1 온라인 서버에서 기본 라이브러리(libaio) 패키지 다운로드 
 
@@ -42,7 +42,7 @@ https://www.oracle.com/kr/database/technologies/instant-client/downloads.html �
 
 zip 파일을 오프라인 서버 /tmp 로 이동
 
-3. 파이썬 필수 라이브러리 다운로드 및 패키징 
+3 파이썬 필수 라이브러리 다운로드 및 패키징 
 
 3.1 파이썬 라이브러리 다운로드
 
@@ -122,7 +122,7 @@ sqlite_rpms.tar 파일을 오프라인 서버의 /tmp 로 이동
 https://www.python.org/downloads/release/python-3126/
 
 
-4. pip 업그레이드 패키지 다운로드 및 준비
+4 pip 업그레이드 패키지 다운로드 및 준비
 
 온라인 서버에서
 
@@ -139,7 +139,7 @@ pip-25.3-py3-none-any.whl
 ```
 pip-25.3-py3-none-any.whl 파일을 오프라인 서버로 이동
 
-5. 오라클 벡터검색 기본 라이브러리 다운로드 및 준비
+5 오라클 벡터검색 기본 라이브러리 다운로드 및 준비
 
 온라인 서버에서 다음과 같이 준비합니다. 아래 wheel들은 23.26에서 기본 적으로 필요한 라이브러리 셋입니다.
 
@@ -174,7 +174,7 @@ tar cvf def_whl.tar def_whl
 ```
 def_whl.tar 파일을 오프라인 서버의 /tmp 로 이동합니다.
 
-6. OML4py client 라이브러리 다운로드 및 준비
+6 OML4py client 라이브러리 다운로드 및 준비
 
 오라클 oml4py 클라이언트 다운로드에서 DB 버전에 맞는 패키지를 다운로드합니다.
 
@@ -182,7 +182,7 @@ https://www.oracle.com/database/technologies/oml4py-downloads.html
 
 오프라인 서버로 V1048628-01.zip 파일 /opt/oracle/oml4py 로 이동합니다.
 
-7. jupyter lab 다운로드 및 준비
+7 jupyter lab 다운로드 및 준비
 
 온라인 서버에서 다음과 같이 패키징 작업을 합니다.
 
@@ -198,7 +198,7 @@ tar cvf jupyterlab_wheelhouse.tar jupyterlab_wheelhouse
 ```
 jupyterlab_wheelhouse.tar 파일을 오프라인 서버 /tmp로 이동
 
-8. 오라클 제공 임베딩 모델 다운로드
+8 오라클 제공 임베딩 모델 다운로드
 
 오라클23ai가 설치되어 있는 온라인 서버에서 다음과 같이 작업합니다.
 
@@ -266,7 +266,7 @@ print("complete export2file")
 ```
 다운로드 된 ONNX 모델을 오프라인 DB서버 /u01/models로 이동합니다.
 
-9. RAG 환경을 위한 ollama 준비
+9 RAG 환경을 위한 ollama 준비
 
 Ollama 오프라인 설치, LLM 모델 다운로드 및 오프라인 이동 방법은 아래 링크를 참고하세요.
 https://github.com/kairkowy/handon-labs-for-vector-search/blob/main/similarity_search/OLLAMA%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EC%84%A4%EC%B9%98%20%EB%B0%8F%20RPM%20%EC%84%A4%EC%B9%98%20%EB%B0%A9%EB%B2%95.md
