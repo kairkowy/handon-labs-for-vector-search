@@ -101,8 +101,9 @@ insert into img_tbl(imgno,img_category,img_category_detail,img) values
 CREATE OR REPLACE DIRECTORY DOCPATH as '/home/oracle/labs/vector/similarity_search/data/doc/rag';
 
 create table rag_tbl(
-    id number, 
+    id number primary key, 
     doc blob);
+
 insert into rag_tbl(id,doc) values
 (2,to_blob(bfilename('DOCPATH','SPRi_AI_202404.pdf')))
 insert into rag_tbl(id,doc) values
@@ -121,6 +122,9 @@ create table if not exists rag_tbl_v(
 청크ID number,
 문서내용 varchar2(4000),
 벡터 vector);
+
+create index rag_tbl_v_key ON rag_tbl_v(문서번호,청크ID);
+
 
 # 2-2 RAG_DB 데모 테이블
 # 테이블
