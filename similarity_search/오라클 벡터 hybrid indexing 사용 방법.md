@@ -30,7 +30,7 @@ Oracle Text 사용 세부 내용은 github 참조 : https://github.com/kairkowy/
 sqlplus / as sysdba
 ```sql
 alter session set container=freepdb1;
-show suer
+show user
 
 GRANT CTXAPP TO labadmin;
 GRANT EXECUTE ON CTXSYS.CTX_CLS TO labadmin;
@@ -57,6 +57,7 @@ exec ctx_ddl.create_preference('DOC_FILTER', 'AUTO_FILTER');
 
 4. 임베딩 preference 생성
 
+
 ```sql
 begin
   DBMS_VECTOR_CHAIN.CREATE_PREFERENCE('vectorizer_spec',
@@ -65,7 +66,7 @@ begin
             "vector_idxtype" :  "hnsw",
             "model"          :  "labadmin.MULTILINGUAL_E5_SMALL",
             "by"             :  "words",
-            "max"            :  100,
+            "max"            :  200,
             "overlap"        :  10,
             "split"          :  "recursively",
             "language"       : "korean",
@@ -74,6 +75,12 @@ begin
         ));
 end;
 /
+```
+ 
+preference 삭제
+
+```sql
+exec DBMS_VECTOR_CHAIN.DROP_PREFERENCE('vectorizer_spec');
 ```
 
 참고자료 https://docs.oracle.com/en/database/oracle/oracle-database/26/vecse/create_preference.html#GUID-B83978CD-EAF8-4794-9652-F335C54C3385
