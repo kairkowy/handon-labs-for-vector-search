@@ -186,9 +186,17 @@ cd $HOME/python/Python-3.12.6
 make -j$(nproc)
 make altinstall
 
-# 실행 확인
+# 실행파일 링크
+
 cd $HOME/python/3.12/bin
 ls
+2to3-3.12  idle3.12  pip3.12  pydoc3.12  python3.12  python3.12-config
+ln -s python3.12 python3
+ln -s python3.12 python
+ln -s pip3.12 pip3
+ln -s pip3.12 pip
+
+# 실행 확인
 
 ./python --version
 3.12.6 ...
@@ -196,11 +204,6 @@ ls
 ./pip --version
 24.x ...
 
-# 실행파일 링크
-ln -s python3.12 python3
-ln -s python3.12 python
-ln -s pip3.12 pip3
-ln -s pip3.12 pip
 ```
  파이썬 실행 환경 설정
 ```
@@ -569,3 +572,4 @@ OLLAMA_OUTPUT
 end of document
 
 감사합니다.
+
