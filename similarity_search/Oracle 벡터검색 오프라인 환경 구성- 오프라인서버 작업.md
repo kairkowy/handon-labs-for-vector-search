@@ -213,7 +213,7 @@ export PYTHON_HOME=$HOME/python/3.12
 export LD_LIBRARY_PATH=$PYTHON_HOME/lib:$LD_LIBRARY_PATH
 export PATH=$PYTHON_HOME/bin:$PATH
 
-source .basg_profile
+source .bash_profile
 ```
 
 현재 Python이 사용하는 site-packages 경로 확인
@@ -572,4 +572,5 @@ OLLAMA_OUTPUT
 end of document
 
 감사합니다.
+
 
