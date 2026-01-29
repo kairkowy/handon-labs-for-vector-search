@@ -271,6 +271,7 @@ pip3 install /opt/oracle/oml4py/client/oml-2.1-cp312-cp312-linux_x86_64.whl
 # oml 확인
 
 python3
+import oml
 from oml.utils import ONNXPipelineConfig
 ONNXPipelineConfig.show_preconfigured()
 
@@ -572,5 +573,6 @@ OLLAMA_OUTPUT
 end of document
 
 감사합니다.
+
 
 
