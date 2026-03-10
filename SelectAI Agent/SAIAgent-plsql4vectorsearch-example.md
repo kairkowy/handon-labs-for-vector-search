@@ -165,7 +165,7 @@ BEGIN
   DBMS_CLOUD_AI.CREATE_PROFILE(
     profile_name => 'INFOSERVICE_PROFILE',
     attributes   => '{
-      "provider_endpoint": "http://192.168.56.1",
+      "provider_endpoint": "http://service-ollama",
       "model": "gemma2:9b",
       "conversation": true
     }',
@@ -247,6 +247,8 @@ BEGIN
 END;
 /
 
+Created conversation with ID: 4CA2DA2C-C33D-32E8-E063-187B000A14BB
+
 -- 3. 대화형 Agent 실행
 set serveroutput on
 set timing on
@@ -263,6 +265,11 @@ BEGIN
 END;
 /
 
+공공기관 소프트웨어 분리발주 대상 사업 관련 법률 근거는 정보통신망법 제2조 제1항과 제10조 제1항입니다. 정보통신망법 제2조 제1항은 공공기관의 사업을
+정의하고, 제10조 제1항은 분리발주를 할 수 있는 사업을 규정하고 있습니다.
+
+경   과: 00:00:47.29
+
 ```
 
 #### 7. 세션의 Agent team 종료(close)
@@ -274,6 +281,33 @@ EXEC DBMS_CLOUD_AI_AGENT.CLEAR_TEAM;
 #### 8. Select AI 실행 모니터링
 
 ```sql
+
+-- Tool history 조회
+
+set line 300
+set pagesize 2000
+col INVOCATION_ID format a6
+col TOOL_NAME format a20
+col INPUT_PREVIEW format a40
+col OUTPUT format a40
+col tool_output format a40
+col START_DATE format a20
+col END_DATE format a20
+col TASK_NAME format a20
+
+SELECT
+  SUBSTR(INVOCATION_ID,1,4) as INVOCATION_ID,
+  TOOL_NAME,
+  SUBSTR(input, 1, 100)     AS input_preview,
+  SUBSTR(output, 1,100)     AS output,
+  SUBSTR(tool_output, 1, 100) AS tool_output,
+  start_date,
+  end_date
+FROM user_ai_agent_tool_history
+WHERE TOOL_NAME = 'VECTOR_SEARCH_TOOL'
+ORDER BY start_date DESC
+FETCH FIRST 3 ROWS ONLY;
+
 -- 프로파일 목록 조회
 
 SELECT p.profile_name,
@@ -312,36 +346,6 @@ FROM USER_AI_AGENT_TOOL_HISTORY
 WHERE TOOL_NAME = upper('vector_search_tool')
 GROUP BY TOOL_NAME;
 
--- Tool history 조회
-
-set line 300
-set pagesize 2000
-col INVOCATION_ID format a6
-col TOOL_NAME format a20
-col INPUT_PREVIEW format a40
-col OUTPUT format a40
-col tool_output format a40
-col START_DATE format a20
-col END_DATE format a20
-col TASK_NAME format a20
-
-SELECT
-  SUBSTR(INVOCATION_ID,1,4) as INVOCATION_ID,
-  TOOL_NAME,
-  SUBSTR(input, 1, 100)     AS input_preview,
-  SUBSTR(output, 1,100)     AS output,
-  SUBSTR(tool_output, 1, 100) AS tool_output,
-  start_date,
-  end_date
-FROM user_ai_agent_tool_history
-WHERE TOOL_NAME = 'VECTOR_SEARCH_TOOL'
-ORDER BY start_date DESC
-FETCH FIRST 3 ROWS ONLY;
-
-INVOCA TOOL_NAME            INPUT_PREVIEW                            OUTPUT                                   TOOL_OUTPUT                              START_DATE         END_DATE
------- -------------------- ---------------------------------------- ---------------------------------------- ---------------------------------------- -------------------- --------------------
-30     VECTOR_SEARCH_TOOL   { "P_QUERY": "공공기관 소프트웨어 분리발주 사업 법적 근거" }{"status": "success", "result": "문서번                        26/03/06 19:29:32.44 26/03/06 19:29:33.04
-                                                                     호: 3, 청크ID: 12                                                                 4873 +09:00          2556 +09:00
 ```
 
 #### 9. ollama 서비스 모니터링
