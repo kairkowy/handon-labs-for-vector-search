@@ -29,6 +29,7 @@ set pagesize 200
 col owner format a20
 col OBJECT_NAME format a30
 
+select con_id, owner, object_name, status, sharing, oracle_maintained from cdb_objects where object_name like 'DBMS_CLOUD%'
     CON_ID OWNER                OBJECT_NAME                    STATUS  SHARING            O
 ---------- -------------------- ------------------------------ ------- ------------------ -
 ~~~
