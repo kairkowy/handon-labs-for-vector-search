@@ -111,6 +111,7 @@ BEGIN
   );
 END;
 /
+
 ```
 ***주의 : attribute에 들어가는 Instruction, role등은 영문으로 지정해야 정확한 실행이 가능함. 한글 지시어는 작동이 않될 수 있음.***
 
@@ -282,8 +283,36 @@ EXEC DBMS_CLOUD_AI_AGENT.CLEAR_TEAM;
 
 ```sql
 
--- Tool history 조회
+-- Tool생성 확인
+set line 200
+col tool_name format a30
+col description format a40
+col attribute_name format a30
+col attribute_value format a100
 
+SELECT t.tool_name,
+       t.description,
+       t.status,
+       a.attribute_name,
+       DBMS_LOB.SUBSTR(a.attribute_value, 4000, 1) AS attribute_value
+FROM   user_ai_agent_tools t
+JOIN   user_ai_agent_tool_attributes a
+       USING (tool_id)
+WHERE t.TOOL_NAME = upper('VECTOR_SEARCH_TOOL')
+ORDER BY t.tool_name, a.attribute_name;
+
+TOOL_NAME                      DESCRIPTION                              STATUS                   ATTRIBUTE_NAME
+------------------------------ ---------------------------------------- ------------------------ ------------------------------
+ATTRIBUTE_VALUE
+----------------------------------------------------------------------------------------------------
+VECTOR_SEARCH_TOOL             Vector search context tool               ENABLED                  function
+VECTOR_SEARCH
+
+VECTOR_SEARCH_TOOL             Vector search context tool               ENABLED                  instruction
+Use this tool only to retrieve top 5 relevant chunks from RAG_TBL_V. This tool requires exactly one
+parameter: query (string). Return only retrieved context text. Do not summarize. Do not provide the
+
+-- Tool history 조회
 set line 300
 set pagesize 2000
 col INVOCATION_ID format a6
@@ -308,44 +337,29 @@ WHERE TOOL_NAME = 'VECTOR_SEARCH_TOOL'
 ORDER BY start_date DESC
 FETCH FIRST 3 ROWS ONLY;
 
--- 프로파일 목록 조회
-
-SELECT p.profile_name,
-       p.status,
-       CAST(p.created AS DATE) AS created,
-       a.attribute_name,
-       DBMS_LOB.SUBSTR(a.attribute_value, 4000, 1) AS attribute_value
-FROM   user_cloud_ai_profiles p
-JOIN   user_cloud_ai_profile_attributes a
-       USING (profile_id)
-WHERE p.PROFILE_NAME = 'INFOSERVICE_PROFILE'
-ORDER BY p.profile_name, a.attribute_name;
-
--- tool 호출 확인
+-- Tool 호출 이력 조회
 
 SELECT 
-    CONVERSATION_PROMPT_ID,
-    CONVERSATION_ID,
-    PROMPT,
-    PROMPT_RESPONSE,
-    PROMPT_ACTION,
-    CREATED
-FROM USER_CLOUD_AI_CONVERSATION_PROMPTS
-ORDER BY CREATED DESC
-FETCH FIRST 5 ROWS ONLY;
+    TOOL_NAME,              -- 실행된 tool 이름
+    INPUT,                  -- tool에 전달된 입력 (CLOB)
+    LENGTH(OUTPUT) AS OUTPUT_LENGTH,  -- 출력 길이 (바이트)
+    TOOL_OUTPUT,            -- tool의 실행 결과 (CLOB)
+    START_DATE              -- tool 실행 시작 시각
+FROM USER_AI_AGENT_TOOL_HISTORY
+ORDER BY START_DATE DESC;
 
--- Tool history 조회
-
+-- 최근 10개만 조회
 SELECT 
     TOOL_NAME,
-    COUNT(*) AS EXECUTION_COUNT,
-    AVG(LENGTH(OUTPUT)) AS AVG_OUTPUT_SIZE,
-    MIN(START_DATE) AS FIRST_USED,
-    MAX(START_DATE) AS LAST_USED
+    SUBSTR(INPUT, 1, 100) AS INPUT_PREVIEW,
+    LENGTH(OUTPUT) AS OUTPUT_LENGTH,
+    SUBSTR(TOOL_OUTPUT, 1, 200) AS OUTPUT_PREVIEW,
+    START_DATE,
+    END_DATE,
+    (END_DATE - START_DATE) * 24 * 3600 AS DURATION_SECONDS  -- 실행 시간 (초)
 FROM USER_AI_AGENT_TOOL_HISTORY
-WHERE TOOL_NAME = upper('vector_search_tool')
-GROUP BY TOOL_NAME;
-
+ORDER BY START_DATE DESC
+FETCH FIRST 10 ROWS ONLY;
 ```
 
 #### 9. ollama 서비스 모니터링
