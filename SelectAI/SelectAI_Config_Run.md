@@ -245,7 +245,6 @@ Hello! How can I assist you today?
 - LLM 모델 : qwen2.5-coder:7b
 
 ```sql
-
 BEGIN
   -- 기존 프로파일 있으면 삭제 (없어도 무시)
   BEGIN
@@ -263,13 +262,10 @@ BEGIN
     profile_name => 'SELECTAI_QRY',
     attributes   => '{
       "provider_endpoint": "http://service-ollama",
-      "model": "qwen2.5-coder:7b",
+      "model": "gemma2:9b",
+      "comments": true,
       "object_list": [
-        {"owner": "LABADMIN", "name": "DOC_STORE"},
-        {"owner": "LABADMIN", "name": "DOC_STORE_CHUNKS"},
-        {"owner": "LABADMIN", "name": "RAG_TBL"},
-                {"owner": "LABADMIN", "name": "RAG_TBL_V"},
-        {"owner": "LABADMIN", "name": "tour_hist_tbl"}
+        {"owner": "LABADMIN", "name": "TOUR_HIST"}
       ],
       "max_tokens": 1024,
       "temperature": 0.1,
@@ -280,8 +276,11 @@ BEGIN
   );
 END;
 /
+EXEC DBMS_CLOUD_AI.CLEAR_PROFILE;
 
+EXEC DBMS_CLOUD_AI.SET_PROFILE('SELECTAI_QRY');
 ```
+**중요 : "comments": true 를 사용하면 Annotations 정보가 LLM에 전달됨**
 
 SelectAI 자연어 DB쿼리 실행
 
@@ -290,69 +289,27 @@ SELECT DBMS_CLOUD_AI.get_profile();    -- 현재 프로파일 확인
 
 EXEC DBMS_CLOUD_AI.SET_PROFILE('SELECTAI_QRY');
 
-// tour_hist_tbl 컬럼 정보 
-
- COLUMN_NAME                    DATA_TYPE
------------------------------- ------------------------------
-기준년월                       VARCHAR2
-관광객유형                     VARCHAR2
-제주대분류                     VARCHAR2
-제주중분류                     VARCHAR2
-업종명                         VARCHAR2
-성별                           VARCHAR2
-연령대별                       VARCHAR2
-카드이용금액                   NUMBER
-카드이용건수                   NUMBER
-건당이용금액                   NUMBER
-데이터기준일자                 DATE
-
 set long 1024
 set line 300
-col 총합(원) format 999,999,999,999
 
 
-select ai runsql 성별 카드이용금액의 총합은? 총합은 원화로 표시해줘;
+select ai runsql 카드이용금액의 총합을 성별로 집계해줘;
 
-성별                                                                 총합(원)
+
+VISIT_GENDER                                                 카드이용금액합계
 ------------------------------------------------------------ ----------------
-남                                                             25,714,910,191
-여                                                             22,888,271,083
+남                                                                 2.5715E+10
+여                                                                 2.2888E+10
 
-select ai runsql 건당이용금액 중에서 제일 많은 금액 순으로 5개 출력해줘; 
+select ai runsql 건당이용금액 중에서 제일 많은 금액을 날짜순으로 5개 출력해줘; 
 
-건당이용금액
-------------
-      539047
-      456082
-      419200
-      414960
-      409107
-
-
-select ai runsql '문서 테이블에서 DOCNO가 10-1인 로우를 출력해줄래?';
-
-DOCNO
-------------------------------
-DOC_NAME
---------------------------------------------------------------------------------
-DOC_CR_DATE
-------------------------------------------------------------
-DOC_DEPT
---------------------------------------------------------------------------------
-10-1
-광역 교통망 확충 3개 사업 예타 통과로 대도교통혼잡 해소기대
-20250710
-기획재정부
-
-
-select ai showsql '문서 테이블에서 DOCNO가 10-1인 로우를 출력해줄래?';
-
-RESPONSE
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SELECT "DOCNO", "DOC_NAME", "DOC_CR_DATE", "DOC_DEPT"
-FROM "LABADMIN"."DOC_STORE"
-WHERE "DOCNO" = '10-1'
-
+TR_DATE  AMOUNTPERTR
+-------- -----------
+17/02/16      539047
+17/02/16      456082
+17/02/16      419200
+17/02/16      414960
+17/02/16      409107
 
 참고 : Select AI 구동(Action) 파라미터
 
