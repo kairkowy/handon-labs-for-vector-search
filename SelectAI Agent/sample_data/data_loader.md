@@ -8,20 +8,19 @@
 
 
 테이블 생성
-
 ```sql
-CREATE TABLE tour_hist_tbl (
-  "기준년월"        VARCHAR2(20),
-  "관광객유형"      VARCHAR2(100),
-  "제주대분류"      VARCHAR2(60),
-  "제주중분류"      VARCHAR2(60),
-  "업종명"          VARCHAR2(100),
-  "성별"            VARCHAR2(20),
-  "연령대별"        VARCHAR2(60),
-  "카드이용금액"    NUMBER,
-  "카드이용건수"    NUMBER,
-  "건당이용금액"    NUMBER,
-  "데이터기준일자"  DATE
+CREATE TABLE tour_hist (
+  tr_yearmonth        VARCHAR2(20),
+  visitor_type      VARCHAR2(100),
+  jeju_class1      VARCHAR2(60),
+  jeju_class2      VARCHAR2(60),
+  market_type      VARCHAR2(100),
+  visit_gender     VARCHAR2(20),
+  age_grp        VARCHAR2(60),
+  card_amount    NUMBER,
+  card_tr_cnt    NUMBER,
+  amountpertr    NUMBER,
+  tr_date  DATE
 );
 
 ```
@@ -41,26 +40,26 @@ OPTIONS (SKIP = 1)
 LOAD DATA
 CHARACTERSET UTF8
 INFILE './jeju_tour_hist_bc_20170216-utf8.txt'
-INTO TABLE tour_hist_tbl
+INTO TABLE tour_hist
 APPEND
 FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"'
 TRAILING NULLCOLS
 (
-  "기준년월"        CHAR,
-  "관광객유형"      CHAR,
-  "제주대분류"      CHAR,
-  "제주중분류"      CHAR,
-  "업종명"          CHAR,
-  "성별"            CHAR,
-  "연령대별"        CHAR,
-  "카드이용금액"    INTEGER EXTERNAL,
-  "카드이용건수"    INTEGER EXTERNAL,
-  "건당이용금액"    INTEGER EXTERNAL,
-  "데이터기준일자"  DATE "YYYY-MM-DD"
+  tr_yearmonth        CHAR,
+  visitor_type      CHAR,
+  jeju_class1      CHAR,
+  jeju_class2      CHAR,
+  market_type    CHAR,
+  visit_gender   CHAR,
+  age_grp        CHAR,
+  card_amount    INTEGER EXTERNAL,
+  card_tr_cnt    INTEGER EXTERNAL,
+  amountpertr     INTEGER EXTERNAL,
+  tr_date  DATE "YYYY-MM-DD"
 )
 
-
-sqlldr labadmin/Welcome1@orclpdb1 control=loader.ctl
-
 ```
+
+sqlldr labadmin/Welcome1@orclpdb1 control=control.ctl
+
