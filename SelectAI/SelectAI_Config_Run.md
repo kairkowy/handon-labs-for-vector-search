@@ -4,8 +4,9 @@
 
 1. DMBS_CLOUD 패키지 설치
 2. Wallet 구성
-3. Oracle-Ollama 서비스 ACL 오픈
-4. SELECTAI 쿼리 실행(프로파일, 쿼리)
+3. 계정에 패키지 실행권한 부여
+4. Oracle-Ollama 서비스 ACL 오픈
+5. SELECTAI 쿼리 실행(프로파일, 쿼리)
 
 ### 구성 및 실행
 
