@@ -103,8 +103,31 @@ PROPERTY_NAME                  PROPERTY_VALUE
 SSL_WALLET                     /home/oracle/wallets/ssl
 
 ```
+3. 계정에 패키지 실행권한 부여
 
-3. Oracle-Ollama 서비스 ACL 오픈
+```sql
+alter session set container=orclpdb1;
+GRANT EXECUTE on DBMS_CLOUD to labadmin;
+GRANT EXECUTE on DBMS_CLOUD_AI to labadmin;
+GRANT EXECUTE on DBMS_CLOUD_PIPELINE to labadmin;
+GRANT execute on SYS.UTL_HTTP to labadmin;
+GRANT execute on sys.dbms_network_acl_admin to labadmin;
+
+SELECT table_name AS package_name, privilege 
+ FROM DBA_TAB_PRIVS 
+ WHERE grantee = 'LABADMIN'
+ AND   (table_name = 'DBMS_CLOUD_PIPELINE'
+        OR table_name = 'DBMS_CLOUD_AI');
+
+
+col PACKAGE_NAME format a50
+
+PACKAGE_NAME                                       PRIVILEGE
+-------------------------------------------------- ----------------------------------------
+DBMS_CLOUD_PIPELINE                                EXECUTE
+```
+
+4. Oracle-Ollama 서비스 ACL 오픈
 
 오라클DB에서 외부 서비스와 API 연결을 위해서는 ACL을 만들어 주어야 함. PDB 뿐만 아니라 CDB에서도 외부 API 연결 서비스를 등록해줘야 함. 그렇지 않으면 Authorization Fail을 만남.
 
@@ -151,31 +174,6 @@ BEGIN
 END;
 /
 ```
-
-패키지 실행권한 부여
-
-```sql
-alter session set container=orclpdb1;
-GRANT EXECUTE on DBMS_CLOUD to labadmin;
-GRANT EXECUTE on DBMS_CLOUD_AI to labadmin;
-GRANT EXECUTE on DBMS_CLOUD_PIPELINE to labadmin;
-GRANT execute on SYS.UTL_HTTP to labadmin;
-GRANT execute on sys.dbms_network_acl_admin to labadmin;
-
-SELECT table_name AS package_name, privilege 
- FROM DBA_TAB_PRIVS 
- WHERE grantee = 'LABADMIN'
- AND   (table_name = 'DBMS_CLOUD_PIPELINE'
-        OR table_name = 'DBMS_CLOUD_AI');
-
-
-col PACKAGE_NAME format a50
-
-PACKAGE_NAME                                       PRIVILEGE
--------------------------------------------------- ----------------------------------------
-DBMS_CLOUD_PIPELINE                                EXECUTE
-```
-
 ### SELECTAI 자연어 쿼리 실행(프로파일, 쿼리)
 
 참고[중요] : OLLAMA-Oracle 연계 환경에서는 Ollama 인증 구성을 필요로 하지 않습니다. 아래 메시지를 만나실 경우에는 Nginx Proxy, 오라클 프로파일에 사용자 인증 부분을 제거해주세요
