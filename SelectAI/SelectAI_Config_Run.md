@@ -8,11 +8,9 @@
 4. Oracle-Ollama 서비스 ACL 오픈
 5. SELECTAI 쿼리 실행(프로파일, 쿼리)
 
-### 구성 및 실행
+### 환경 구성 
 
 1. DMBS_CLOUD 패키지 설치
-
-DMBS_CLOUD 패키지 설치
 
 Oracle26Ai 온프레미스에서는 SelectAI, SelectAI Agent 관련 패키지를 추가로 관리자가 구성해줘야 함.
 
@@ -175,7 +173,8 @@ BEGIN
 END;
 /
 ```
-### SELECTAI 자연어 쿼리 실행(프로파일, 쿼리)
+
+### 5. SELECTAI 자연어 쿼리 실행(프로파일, 쿼리)
 
 참고[중요] : OLLAMA-Oracle 연계 환경에서는 Ollama 인증 구성을 필요로 하지 않습니다. 아래 메시지를 만나실 경우에는 Nginx Proxy, 오라클 프로파일에 사용자 인증 부분을 제거해주세요
 
