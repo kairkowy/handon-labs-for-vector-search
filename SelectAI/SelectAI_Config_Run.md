@@ -125,9 +125,9 @@ sqlplus / as sysdba
 
 BEGIN  
   DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-    host => '10.0.9.197',
+    host => '*',
     ace  => xs$ace_type(
-      privilege_list => xs$name_list('connect','resolve'),
+      privilege_list => xs$name_list('connect','resolve','http'),
       principal_name => 'C##CLOUD$SERVICE',
       principal_type => xs_acl.ptype_db
     )
