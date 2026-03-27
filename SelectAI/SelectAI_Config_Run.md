@@ -4,13 +4,15 @@
 
 1. DMBS_CLOUD 패키지 설치
 2. Wallet 구성
-3. 계정에 패키지 실행권한 부여
+3. 패키지 실행권한 부여
 4. Oracle-Ollama 서비스 ACL 오픈
 5. SELECTAI 쿼리 실행(프로파일, 쿼리)
 
-#### 환경 구성 
+### 구성 및 실행
 
 1. DMBS_CLOUD 패키지 설치
+
+DMBS_CLOUD 패키지 설치
 
 Oracle26Ai 온프레미스에서는 SelectAI, SelectAI Agent 관련 패키지를 추가로 관리자가 구성해줘야 함.
 
@@ -102,7 +104,8 @@ PROPERTY_NAME                  PROPERTY_VALUE
 SSL_WALLET                     /home/oracle/wallets/ssl
 
 ```
-3. 계정에 패키지 실행권한 부여
+
+3. 패키지 실행권한 부여
 
 ```sql
 alter session set container=orclpdb1;
@@ -147,9 +150,9 @@ sqlplus / as sysdba
 
 BEGIN  
   DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-    host => '*',
+    host => '10.0.9.197',
     ace  => xs$ace_type(
-      privilege_list => xs$name_list('connect','resolve','http'),
+      privilege_list => xs$name_list('connect','resolve'),
       principal_name => 'C##CLOUD$SERVICE',
       principal_type => xs_acl.ptype_db
     )
@@ -174,7 +177,8 @@ END;
 /
 ```
 
-#### 5. SELECTAI 자연어 쿼리 실행(프로파일, 쿼리)
+
+### SELECTAI 자연어 쿼리 실행(프로파일, 쿼리)
 
 참고[중요] : OLLAMA-Oracle 연계 환경에서는 Ollama 인증 구성을 필요로 하지 않습니다. 아래 메시지를 만나실 경우에는 Nginx Proxy, 오라클 프로파일에 사용자 인증 부분을 제거해주세요
 
@@ -212,15 +216,18 @@ BEGIN
     attributes   => '{
       "provider":"OPENAI",
       "provider_endpoint": "http://service-ollama",
-      "model": "llama3.2",
-      "conversation": true
-    }',
+      "model": "exaone3.5",
+      "conversation": false,
+      "max_tokens": 1024,
+      "temperature": 0,
+      "annotations": true,
+      "seed": 42
+      }',
     status       => 'enabled',
     description  => 'Select AI profile for private Ollama via Nginx proxy'
   );
 END;
 /
-
 ```
 
 SelectAI 실행(LLM과 단순 채팅)
