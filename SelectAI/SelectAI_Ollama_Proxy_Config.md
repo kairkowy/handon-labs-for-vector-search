@@ -112,6 +112,8 @@ Proxy 80 포트 설정
 
 // oracle select ai 에서 provicer_endpoint 파라미터 값에 포트번호 기술하면 에러가남(OPENAI compitable 조전)에 따라 80 포트 서비스가 필요함
 
+**lua 패키지 설치 필요**
+
 ```shell
 vi /etc/nginx/conf.d/ollama-proxy.conf
 
@@ -135,26 +137,76 @@ server {
     # (선택) 헬스체크는 인증 제외할지 여부
     # location = /health { return 200 "ok\n"; }
 
-    location / {
-        proxy_pass http://ollama_upstream;
+#    location / {
+#        proxy_pass http://ollama_upstream;
+#
+#        # 기본 헤더
+#        proxy_http_version 1.1;
+#        proxy_set_header Host $host;
+#        proxy_set_header X-Real-IP $remote_addr;
+#        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#
+#        # Ollama는 응답이 길어질 수 있음 (stream/SSE 포함)
+#        proxy_read_timeout 3600;
+#        proxy_send_timeout 3600;
+#
+#        # streaming 안정화(권장)
+#        proxy_buffering off;
+#
+#        # keepalive
+#        proxy_set_header Connection "";
+#    }
 
-        # 기본 헤더
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  location /v1/chat/completions {
 
-        # Ollama는 응답이 길어질 수 있음 (stream/SSE 포함)
-        proxy_read_timeout 3600;
-        proxy_send_timeout 3600;
+    proxy_http_version 1.1;
 
-        # streaming 안정화(권장)
-        proxy_buffering off;
+    # ===== 헤더 =====
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Connection "";
 
-        # keepalive
-        proxy_set_header Connection "";
+    # ===== 타임아웃 (Ollama 필수) =====
+    proxy_read_timeout 3600;
+    proxy_send_timeout 3600;
+
+    # ===== streaming 안정화 =====
+    proxy_buffering off;
+
+    # ===== 요청(JSON) 수정 =====
+    access_by_lua_block {
+        ngx.req.read_body()
+        local body = ngx.req.get_body_data()
+
+        if body then
+            local cjson = require "cjson.safe"
+            local json = cjson.decode(body)
+
+            if json then
+                -- 기존 options 유지하면서 merge
+                local options = json.options or {}
+
+                options.num_ctx = 2048
+                options.num_thread = 16
+                options.num_predict = 384
+                options.temperature = 0
+                options.seed = 42
+
+                json.options = options
+
+                local new_body = cjson.encode(json)
+
+                ngx.req.set_body_data(new_body)
+                ngx.req.set_header("Content-Length", #new_body)
+            end
+        end
     }
-}
+
+    # ===== Ollama upstream =====
+    proxy_pass http://ollama_upstream;
+ }
+
 ```
 
 Nginx proxy 적용
