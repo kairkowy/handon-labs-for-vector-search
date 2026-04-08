@@ -13,3 +13,4 @@ OLLAMA-Oracle 연계를 위한 Nginx Proxy 구성 : https://github.com/kairkowy/
 
 Select AI 자연어 기반 데이터 조회 샘플 - JOIN 쿼리 자동화 : https://github.com/kairkowy/handon-labs-for-vector-search/blob/main/SelectAI/SelectAI-RunJoinQuery-HR.md
 
+ Synthetic Data Generation(SDG) 기능을 이용한 샘플 데이터 생성 예제 : https://github.com/kairkowy/handon-labs-for-vector-search/blob/main/SelectAI/SyntheticDataGeneration_example.md
