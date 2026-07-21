@@ -110,7 +110,7 @@ insert into rag_tbl(id,doc) values
 (3,to_blob(bfilename('RAGDIR','소프트웨어_분리발주_매뉴얼_개정배포_16.7.pdf')));
 commit;
 
-select dbms_vector_chain.utl_to_text(to_blob(bfilename('RAGDIR','software_order.pdf')), json('{"plaintext":"true","charset":"UTF8","format":"TEXT"}'));
+select dbms_vector_chain.utl_to_text(to_blob(bfilename('RAGDIR','SPRi_AI_202404.pdf')), json('{"plaintext":"true","charset":"UTF8","format":"TEXT"}'));
 
 # 2-1 RAG_DOC 데모 테이블
 
