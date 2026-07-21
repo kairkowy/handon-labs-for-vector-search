@@ -107,7 +107,7 @@ create table rag_tbl(
 insert into rag_tbl(id,doc) values
 (2,to_blob(bfilename('RAGDIR','SPRi_AI_202404.pdf')));
 insert into rag_tbl(id,doc) values
-(3,to_blob(bfilename('RAGDIR','소프트웨어_분리발주_매뉴얼_개정배포_16.7.pdf')));
+(3,to_blob(bfilename('RAGDIR','software_guide.pdf')));
 commit;
 
 select dbms_vector_chain.utl_to_text(to_blob(bfilename('RAGDIR','SPRi_AI_202404.pdf')), json('{"plaintext":"true","charset":"UTF8","format":"TEXT"}'));
