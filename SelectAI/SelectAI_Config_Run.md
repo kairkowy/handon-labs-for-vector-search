@@ -150,7 +150,7 @@ sqlplus / as sysdba
 
 BEGIN  
   DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-    host => '10.0.9.197',
+    host => '*',
     ace  => xs$ace_type(
       privilege_list => xs$name_list('connect','resolve'),
       principal_name => 'C##CLOUD$SERVICE',
@@ -215,7 +215,7 @@ BEGIN
     profile_name => 'SELECTAI_CHAT',
     attributes   => '{
       "provider":"OPENAI",
-      "provider_endpoint": "http://service-ollama",
+      "provider_endpoint": "http://service-ollama/v1",
       "model": "exaone3.5",
       "conversation": false,
       "max_tokens": 1024,
@@ -229,7 +229,7 @@ BEGIN
 END;
 /
 ```
-
+-- 23.26.2에서는 http://service-ollama/v1 처럼 v1을 반드시 붙여줘야함
 SelectAI 실행(LLM과 단순 채팅)
 
 ```sql
