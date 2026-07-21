@@ -17,7 +17,7 @@
 
 grant create any directory to vector;
 
-CREATE OR REPLACE DIRECTORY DOCPATH as '/home/dev01/labs/23aiNF/similarity_search/data/doc';
+CREATE OR REPLACE DIRECTORY DOCPATH as '/home/oracle/labs/data/docs';
 
 create table doc_store(docno varchar(10) primary key,doc_dept varchar(40),doc_cr_date varchar(20), doc_name varchar2(200),doc blob);
 
@@ -44,7 +44,7 @@ alter table doc_store_chunks add constraint pk_chunk primary key(docno,chunked_i
 
 # Similarity search(image) 데이터 준비
 
-CREATE OR REPLACE DIRECTORY IMGPATH as '/home/oracle/labs/vector/similarity_search/data/images';
+CREATE OR REPLACE DIRECTORY IMGPATH as '/home/oracle/labs/data/images';
 create table if not exists img_tbl(
     imgno number,
     img_category varchar(50),
@@ -98,7 +98,7 @@ insert into img_tbl(imgno,img_category,img_category_detail,img) values
 # RAG 데이터 준비
 # 문서 정보 테이블 준비
 
-CREATE OR REPLACE DIRECTORY DOCPATH as '/home/oracle/labs/vector/similarity_search/data/doc/rag';
+CREATE OR REPLACE DIRECTORY DOCPATH as '/home/oracle/labs/data/docs/rag';
 
 create table rag_tbl(
     id number primary key, 
@@ -110,9 +110,7 @@ insert into rag_tbl(id,doc) values
 (3,to_blob(bfilename('DOCPATH','소프트웨어_분리발주_매뉴얼_개정배포_16.7.pdf')))
 commit;
 
-select dbms_vector_chain.utl_to_text(to_blob(bfilename('DOCPATH','car_insurance.pdf')), 
-	json('"plaintext": "true","charset"  : "UTF8"'))
-;
+select dbms_vector_chain.utl_to_text(to_blob(bfilename('DOCPATH','software_order.pdf')), json('{"plaintext":"true","charset":"UTF8","format":"TEXT"}'));
 
 # 2-1 RAG_DOC 데모 테이블
 
