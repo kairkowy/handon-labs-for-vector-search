@@ -23,7 +23,7 @@ BEGIN
   DBMS_CLOUD_AI.CREATE_PROFILE(
     profile_name => 'SAI_RAG_FSSTORE_PROFILE',
     attributes   => '{
-      "provider_endpoint": "http://service-ollama",
+      "provider_endpoint": "http://service-ollama/v1",
       "model": "qwen2.5-coder:7b",
       "conversation": false,
       "temperature": 0.1,
