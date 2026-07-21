@@ -266,7 +266,7 @@ BEGIN
   DBMS_CLOUD_AI.CREATE_PROFILE(
     profile_name => 'SELECTAI_QRY',
     attributes   => '{
-      "provider_endpoint": "http://service-ollama",
+      "provider_endpoint": "http://service-ollama/v1",
       "model": "gemma2:9b",
       "comments": true,
       "object_list": [
